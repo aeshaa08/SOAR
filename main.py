@@ -90,3 +90,4 @@ def add_security_log(data: dict):
 @app.get("/security/logs")
 def get_logs():
     return security_logs
+
