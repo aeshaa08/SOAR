@@ -5,9 +5,11 @@ from datetime import datetime
 
 app = FastAPI()
 
+# File names
 FIRMWARE_FILE = "firmware.bin"
 SIGNATURE_FILE = "firmware.sig"
 
+# Firmware details
 firmware_info = {
     "version": "1.0.0",
     "release_date": str(datetime.now()),
@@ -15,8 +17,13 @@ firmware_info = {
     "signature_file": SIGNATURE_FILE
 }
 
+# Security logs
+security_logs = []
 
+
+# Generate SHA-256 hash
 def generate_hash(filename):
+
     if not os.path.exists(filename):
         return None
 
@@ -26,6 +33,7 @@ def generate_hash(filename):
     return hashlib.sha256(data).hexdigest()
 
 
+# Home page
 @app.get("/")
 def home():
     return {
@@ -33,7 +41,7 @@ def home():
     }
 
 
-# Check latest firmware information
+# Check latest firmware
 @app.get("/firmware/latest")
 def get_latest_firmware():
 
@@ -52,6 +60,7 @@ def get_latest_firmware():
     }
 
 
+# Download firmware information
 @app.get("/firmware/download")
 def download_firmware():
 
@@ -67,10 +76,7 @@ def download_firmware():
     }
 
 
-# Security log endpoint
-security_logs = []
-
-
+# Add security event logs
 @app.post("/security/log")
 def add_security_log(data: dict):
 
@@ -84,11 +90,12 @@ def add_security_log(data: dict):
     security_logs.append(log)
 
     return {
-        "message": "Security log stored",
+        "message": "Security log stored successfully",
         "log": log
     }
 
 
+# View all security logs
 @app.get("/security/logs")
 def get_logs():
     return security_logs
