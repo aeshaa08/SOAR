@@ -1,0 +1,27 @@
+name: Sign Firmware
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install cryptography
+
+      - name: Restore private key
+        run: |
+          echo "${{ secrets.PRIVATE_KEY }}" > private_key.pem
+
+      - name: Sign firmware
+        run: python sign_firmware.py
